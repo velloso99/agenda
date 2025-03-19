@@ -44,9 +44,25 @@ app_lg = ImageTk.PhotoImage(app_lg)
 app_logo = Label(frame_logo, image=app_lg, text="Agenda", width=1200, compound=LEFT, relief=RAISED, anchor=NW, font=('Ivy 15 bold'), bg=co6, fg=co1)
 app_logo.place(x=0, y=0)
 
+#***************************************************************************************************************************************
+# Botoes Cabeçalho
+app_img_add = Image.open('img/save.png')
+app_img_add = app_img_add.resize((18,18))
+app_img_add = ImageTk.PhotoImage(app_img_add)
+app_add = Button(frame_botoes,command=None, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_add.grid(row=0, column=1)
 
+app_img_update = Image.open('img/update.png')
+app_img_update = app_img_update.resize((18,18))
+app_img_update = ImageTk.PhotoImage(app_img_update)
+app_update = Button(frame_botoes,command=None, image=app_img_update, text="Atualizar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_update.grid(row=0, column=2)
 
-
+app_img_delete = Image.open('img/delete.png')
+app_img_delete = app_img_delete.resize((18,18))
+app_img_delete = ImageTk.PhotoImage(app_img_delete)
+app_delete = Button(frame_botoes,command=None, image=app_img_delete, text="Deletar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_delete.grid(row=0, column=3)
 
 
 
