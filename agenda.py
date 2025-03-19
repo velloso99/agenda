@@ -64,7 +64,23 @@ app_img_delete = ImageTk.PhotoImage(app_img_delete)
 app_delete = Button(frame_botoes,command=None, image=app_img_delete, text="Deletar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_delete.grid(row=0, column=3)
 
+app_img_adress = Image.open('img/andress.png')
+app_img_adress = app_img_adress.resize((18,18))
+app_img_adress = ImageTk.PhotoImage(app_img_adress)
+app_adress = Button(frame_botoes,command=None, image=app_img_adress, text="CEP", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_adress.grid(row=0, column=4)
 
+app_img_categoria = Image.open('img/cat.png')
+app_img_categoria = app_img_categoria.resize((18,18))
+app_img_categoria = ImageTk.PhotoImage(app_img_categoria)
+app_categoria = Button(frame_botoes,command=None, image=app_img_categoria, text="Categoria", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_categoria.grid(row=0, column=5)
+
+app_img_procurar = Image.open('img/procurar.png')
+app_img_procurar = app_img_procurar.resize((18,18))
+app_img_procurar = ImageTk.PhotoImage(app_img_procurar)
+app_procurar = Button(frame_botoes,command=None, image=app_img_procurar, text="Procurar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_procurar.grid(row=0, column=6)
 
 
 
