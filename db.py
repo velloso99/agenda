@@ -19,9 +19,11 @@ try:
                 nome TEXT,
                 ddd TEXT,
                 contato TEXT,
+                categoria TEXT,
+                subcategoria TEXT,
                 email TEXT,
                 nascimento TEXT,
-                idada TEXT,
+                idade TEXT,
                 cep TEXT,
                 endereco TEXT,
                 numero text,
@@ -29,9 +31,38 @@ try:
                 bairro TEXT, 
                 municipio TEXT,
                 estado TEXT,
-                imagem TEXT
+                imagem TEXT,
+                
+            FOREIGN KEY(categoria) REFERENCES categoria(nome) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY(subcategoria) REFERENCES subcategoria(nome) ON UPDATE CASCADE ON DELETE CASCADE     
                 )""")
         print("Tabela AGENDA criado com sucesso!")
 except sqlite3.Error as e:
     print("Erro ao criar Agenda!")
+    
+# Tabela Agenda
+try:
+    with con:
+        cur= con.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS categoria(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT
+                )""")
+        print("Tabela CATEGORIA criado com sucesso!")
+except sqlite3.Error as e:
+    print("Erro ao criar Categoria!")
+    
+# Tabela Agenda
+try:
+    with con:
+        cur= con.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS subcategoria(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT  
+                )""")
+        print("Tabela SUBCATEGORIA criado com sucesso!")
+except sqlite3.Error as e:
+    print("Erro ao criar Categoria!")
     
