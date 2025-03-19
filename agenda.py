@@ -45,6 +45,42 @@ app_logo = Label(frame_logo, image=app_lg, text="Agenda", width=1200, compound=L
 app_logo.place(x=0, y=0)
 
 #***************************************************************************************************************************************
+# Função para abrir o calendário e capturar a data
+def calendario():
+    def pegar_data():
+        data_selecionada = cal.selection_get()  # Obtém a data selecionada
+        entry_data.delete(0, END)  # Limpa a entrada
+        entry_data.insert(0, data_selecionada)  # Insere a data selecionada no campo de texto
+        calendario_janela.destroy()  # Fecha o calendário
+
+    # Criar uma nova janela para o calendário
+    calendario_janela = Toplevel()
+    calendario_janela.title("Selecione a Data")
+    calendario_janela.geometry("100x100")
+    calendario_janela.resizable(width=False, height=False)
+    #root.overrideredirect(1)
+    largura_calendario_janela = 100
+    altura_calendario_janela = 100
+    #obter tamanho da tela
+    largura_tela = calendario_janela.winfo_screenwidth()
+    altura_tela = calendario_janela.winfo_screenheight()
+    # Calcular posição para centralizar
+    pos_x = ( largura_tela-largura_root )//2
+    pos_y = (altura_tela - altura_root)//2
+    # Definir geometria da janela (LxA+X+Y)
+    calendario_janela.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
+    cal = Calendar(calendario_janela, date_pattern="dd-mm-yyyy")  # Calendário com padrão de data
+    cal.pack(pady=20)
+    # Botão para confirmar a seleção da data
+    btn_selecionar = Button(calendario_janela, text="Selecionar", command=pegar_data)
+    btn_selecionar.pack(pady=10)
+
+
+
+
+
+
+
 # Botoes Cabeçalho
 app_img_add = Image.open('img/save.png')
 app_img_add = app_img_add.resize((18,18))
@@ -114,7 +150,22 @@ c_subcategoria.set('Subcategorias')
 c_subcategoria['values'] = None
 c_subcategoria.place(x=150, y=100)
 
+l_email = Label(frame_painel, text="E-Mail:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_email.place(x=10, y=130)
+e_email= Entry(frame_painel, width=30, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+e_email.place(x=70, y=130)
 
+# Botão para abrir o calendário
+bt_calendario = Button(frame_painel, text="Data", command=calendario)
+bt_calendario.place(x=10, y=160)
+# Campo de entrada para exibir a data selecionada
+entry_data = Entry(frame_painel, width=10, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+entry_data.place(x=70, y=160)
+
+l_idade = Label(frame_painel, text="idade:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_idade.place(x=10, y=190)
+e_idade= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_idade.place(x=70, y=190)
 
 
 
