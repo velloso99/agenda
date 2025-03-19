@@ -1,0 +1,12 @@
+co0 = "#2e2b2b" #Preta
+co1 = "#feffff" #branca
+co2 = "#fa882"  #verde pip
+co3 = "#38576b" #valor
+co4 = "#403d3d" #letra
+co5 = "#e06636" #- profit
+co6 = "#B3B3B3" #cinza
+co7 = "#3fbfb9"  #verde
+co8 = "#263238" # + verde
+co9 = "#e9edf5" # + verde
+co10 = "#9A9688"
+co11 = "#f2f4f2"
