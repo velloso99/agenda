@@ -2,11 +2,11 @@ from imports import*
 
 root = tk.Tk()
 root.title("Agenda")
-root.geometry("1200x950")
+root.geometry("980x900")
 root.configure(background=co1)
 root.resizable(width=False, height=False)
 #root.overrideredirect(1)
-largura_root = 1200
+largura_root = 980
 altura_root = 950
 #obter tamanho da tela
 largura_tela = root.winfo_screenwidth()
@@ -18,22 +18,22 @@ pos_y = (altura_tela - altura_root)//2
 root.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
 
 #******************************************************************************************************************************
-frame_logo = Frame(root, width=1200, height=52, bg=co1)
+frame_logo = Frame(root, width=980, height=52, bg=co1)
 frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(root, orient=HORIZONTAL).grid(row=1, columnspan=1, ipadx=680)
 
-frame_botoes = Frame(root, width=1200, height=65, bg=co1)
+frame_botoes = Frame(root, width=980, height=65, bg=co1)
 frame_botoes.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(root, orient=HORIZONTAL).grid(row=3, columnspan=1, ipadx=680)
 
-frame_painel = Frame(root, width=1200, height=500, bg=co1)
+frame_painel = Frame(root, width=980, height=500, bg=co1)
 frame_painel.grid(row=4, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(root, orient=HORIZONTAL).grid(row=5, columnspan=1, ipadx=680)
 
-frame_tabela= Frame(root, width=1200, height=200, bg=co1)
+frame_tabela= Frame(root, width=980, height=200, bg=co1)
 frame_tabela.grid(row=6, column=0, pady=0, padx=10, sticky=NSEW)
 
 #********************************************************************************************************************************
@@ -81,6 +81,39 @@ app_img_procurar = app_img_procurar.resize((18,18))
 app_img_procurar = ImageTk.PhotoImage(app_img_procurar)
 app_procurar = Button(frame_botoes,command=None, image=app_img_procurar, text="Procurar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_procurar.grid(row=0, column=6)
+
+#******************************************************************************************************************************************************************************************
+# Painel
+l_id = Label(frame_painel, text="id:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_id.place(x=10, y=10)
+e_id= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_id.place(x=70, y=10)
+
+l_nome = Label(frame_painel, text="Nome:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_nome.place(x=10, y=40)
+e_nome= Entry(frame_painel, width=30, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+e_nome.place(x=70, y=40)
+
+l_ddd = Label(frame_painel, text="DDD:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_ddd.place(x=10, y=70)
+e_ddd= Entry(frame_painel, width=5, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_ddd.place(x=70, y=70)
+
+l_contato = Label(frame_painel, text="Contato:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_contato.place(x=120, y=70)
+e_contato= Entry(frame_painel, width=15, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+e_contato.place(x=190, y=70)
+
+c_categoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
+c_categoria.set('Categorias')
+c_categoria['values'] = None
+c_categoria.place(x=10, y=100)
+
+c_subcategoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
+c_subcategoria.set('Subcategorias')
+c_subcategoria['values'] = None
+c_subcategoria.place(x=150, y=100)
+
 
 
 
