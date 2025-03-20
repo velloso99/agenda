@@ -39,29 +39,29 @@ try:
 except sqlite3.Error as e:
     print("Erro ao criar Agenda!")
     
-# Tabela Agenda
+# Tabela Categoria
 try:
     with con:
         cur= con.cursor()
         cur.execute("""
             CREATE TABLE IF NOT EXISTS categoria(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT
+                nome TEXT NOT NULL
                 )""")
-        print("Tabela CATEGORIA criado com sucesso!")
+        print("Tabela categoria criado com sucesso!")
 except sqlite3.Error as e:
     print("Erro ao criar Categoria!")
     
-# Tabela Agenda
+# Tabela Subcategoria
 try:
     with con:
         cur= con.cursor()
         cur.execute("""
             CREATE TABLE IF NOT EXISTS subcategoria(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT  
+                nome TEXT NOT NULL 
                 )""")
-        print("Tabela SUBCATEGORIA criado com sucesso!")
+        print("Tabela subcategoria criado com sucesso!")
 except sqlite3.Error as e:
     print("Erro ao criar Categoria!")
     

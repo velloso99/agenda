@@ -1,4 +1,5 @@
 from imports import*
+from PIL import Image, ImageTk
 
 
 root = tk.Tk()
@@ -42,11 +43,11 @@ frame_img.place( y=70, x=500)
 
 #********************************************************************************************************************************
 # Trabalhando no frame logo
-app_lg = Image.open('img/logo.png')
-app_lg = app_lg.resize((50,50))
-app_lg = ImageTk.PhotoImage(app_lg)
-app_logo = Label(frame_logo, image=app_lg, text="Agenda", width=1200, compound=LEFT, relief=RAISED, anchor=NW, font=('Ivy 15 bold'), bg=co6, fg=co1)
-app_logo.place(x=0, y=0)
+img_logo = Image.open("img/logo.png")
+img_logo = img_logo.resize((50, 50))  # Ajusta o tamanho da imagem
+img_logo = ImageTk.PhotoImage(img_logo)
+app_lg = Label(frame_logo, image=img_logo, text="Agenda", width=1200, compound=LEFT, relief=RAISED, anchor=NW, font=('Ivy 15 bold'), bg=co6, fg=co1)
+app_lg.place(x=0, y=0)
 
 #***************************************************************************************************************************************
 # Função para abrir o calendário e capturar a data
@@ -178,7 +179,7 @@ def cadastrar_categoria():
     #Criando a janela
     root1 = Toplevel(root) 
     root1.title("Categoria")
-    root1.geometry("200x120")
+    root1.geometry("200x200")
     root.configure(background=co1)
     root1.resizable(width=False, height=False)
     largura_root = 200
@@ -190,32 +191,105 @@ def cadastrar_categoria():
     pos_x = ( largura_tela-largura_root )//2
     pos_y = (altura_tela - altura_root)//2
     # Definir geometria da janela (LxA+X+Y)
-    root1.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")  
+    root1.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}") 
+    
+    def nova_categoria():
+        nome = e_categoria.get().strip()  # Remove espaços extras
+        if nome == "":
+            messagebox.showerror("Erro", "Preencha o campo!")
+            return
+        criar_categoria([nome])  # Adiciona ao banco
+        messagebox.showinfo("Sucesso", "Categoria cadastrada com sucesso!")
+        root1.destroy()
+        
+    def nova_subcategoria():
+        nome = e_subcategoria.get().strip()  # Remove espaços extras
+        if nome == "":
+            messagebox.showerror("Erro", "Preencha o campo!")
+            return
+        criar_subcategoria([nome])  # Adiciona ao banco
+        messagebox.showinfo("Sucesso", "Subcategoria cadastrada com sucesso!")  
+        root1.destroy() 
+        
+    # Função para buscar categorias no banco
+    def carregar_categorias():
+        con = sqlite3.connect("banco.db")
+        cur = con.cursor()
+        cur.execute("SELECT id, nome FROM categorias")
+        categorias = cur.fetchall()
+        con.close()
+    
+        categoria_dict = {str(id): nome for id, nome in categorias}
+        return categoria_dict
+
+    # Função para carregar subcategorias relacionadas
+    def carregar_subcategorias(event=None):
+        categoria_id = c_categoria.get()
+    
+        if categoria_id:
+            con = sqlite3.connect("banco.db")
+            cur = con.cursor()
+            cur.execute("SELECT nome FROM subcategorias WHERE categoria_id = ?", (categoria_id,))
+            subcategorias = [row[0] for row in cur.fetchall()]
+            con.close()
+        
+            c_subcategoria["values"] = []  # Limpa os valores antigos
+            c_subcategoria["values"] = subcategorias  # Atualiza com novos valores
+            c_subcategoria.set("")  # Limpa a seleção anterior para atualizar corretamente
+
+    # Função para atualizar os combobox sem fechar o app
+    def atualizar_dados():
+        categorias = carregar_categorias()
+    
+        c_categoria["values"] = list(categorias.keys())  # Atualiza o combobox de categorias
+        c_categoria.set("")  # Limpa a seleção anterior
+        c_subcategoria["values"] = []  # Limpa subcategorias
+        
+      
+    
+    # Buscar categorias do banco
+    categorias = carregar_categorias()
+    
+     
+    
+    frame_painel_cat = Frame(root1, width=200, height=200, bg=co1)
+    frame_painel_cat.grid(row=4, column=0, pady=0, padx=0, sticky=NSEW)
+    
+    l_categoria = Label(frame_painel_cat, text="Categoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
+    l_categoria.place(x=60, y=10)
+    e_categoria= Entry(root1, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+    e_categoria.place(x=35, y=40)
     
     
-    l_id = Label(root1, text="Categoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
-    l_id.place(x=60, y=10)
-    e_id= Entry(root1, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
-    e_id.place(x=35, y=40)     
-    
-    # Botoes Cabeçalho
     app_img_add = Image.open('img/save.png')
     app_img_add = app_img_add.resize((18,18))
     app_img_add = ImageTk.PhotoImage(app_img_add)
-    app_add = Button(root1,command=None, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
-    app_add.place(x=60 , y=60)
+    app_add = Button(frame_painel_cat,command=nova_categoria, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_add.place(x=10 , y=60)
     
-    l_id = Label(root1, text="Subcategoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
-    l_id.place(x=60, y=110)
-    e_id= Entry(root1, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
-    e_id.place(x=35, y=140)     
+    app_img_del_cat = Image.open('img/delete.png')
+    app_img_del_cat = app_img_del_cat.resize((18,18))
+    app_img_del_cat = ImageTk.PhotoImage(app_img_del_cat)
+    app_del_cat = Button(frame_painel_cat,command=None, image=app_img_del_cat, text="Delete", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_del_cat.place(x=100, y=60)
+    #-----------------------------------------------------------------------
+    l_subcategoria = Label(frame_painel_cat, text="Subcategoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
+    l_subcategoria.place(x=60, y=110)
+    e_subcategoria= Entry(frame_painel_cat, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+    e_subcategoria.place(x=35, y=140)     
     
-    # Botoes Cabeçalho
+   
     app_img_subc = Image.open('img/save.png')
     app_img_subc = app_img_subc.resize((18,18))
     app_img_subc = ImageTk.PhotoImage(app_img_subc)
-    app_subc = Button(root1,command=None, image=app_img_subc, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
-    app_subc.place(x=60 , y=160)
+    app_subc = Button(frame_painel_cat,command=nova_subcategoria, image=app_img_subc, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_subc.place(x=10 , y=160)
+    
+    app_img_del_sub = Image.open('img/delete.png')
+    app_img_del_sub = app_img_del_sub.resize((18,18))
+    app_img_del_sub = ImageTk.PhotoImage(app_img_del_sub)
+    app_del_del_sub = Button(frame_painel_cat,command=None, image=app_img_del_sub, text="Delete", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_del_del_sub.place(x=100, y=160)
     
             
 #********************************************************************************************************************************    
@@ -262,6 +336,12 @@ app_img_imagem = ImageTk.PhotoImage(app_img_imagem)
 app_imagem = Button(frame_botoes,command=escolher_imagem, image=app_img_imagem, text="Carregar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_imagem.grid(row=0, column=7)
 
+app_img_software = Image.open('img/update.png')
+app_img_software = app_img_software.resize((18,18))
+app_img_software = ImageTk.PhotoImage(app_img_software)
+app_img_software = Button(frame_botoes,command=atualizar_dados, image=app_img_software, text="Atualizar Software", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_img_software.grid(row=0, column=7)
+
 #******************************************************************************************************************************************************************************************
 # Painel
 l_id = Label(frame_painel, text="id:", font=('Ivy 10 bold'), bg=co1, fg=co0)
@@ -286,13 +366,15 @@ e_contato.place(x=190, y=70)
 
 c_categoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
 c_categoria.set('Categorias')
-c_categoria['values'] = None
+c_categoria['values'] = ver_categoria()
 c_categoria.place(x=10, y=100)
+c_categoria.bind("<<ComboboxSelected>>", carregar_subcategorias)  # Evento para carregar subcategorias
 
 c_subcategoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
 c_subcategoria.set('Subcategorias')
-c_subcategoria['values'] = None
+c_subcategoria['values'] = ver_subcategoria()
 c_subcategoria.place(x=150, y=100)
+
 
 l_email = Label(frame_painel, text="E-Mail:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_email.place(x=10, y=130)

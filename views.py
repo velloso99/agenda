@@ -41,6 +41,18 @@ def criar_categoria(i):
     cur = con.cursor()
     query = "INSERT INTO categoria(nome) values(?)"
     cur.execute(query, i)
+    con.commit() 
+# Ver Categoria
+def ver_categoria():
+    lista = []
+    with con:
+        cur = con.cursor()
+        cur.execute('SELECT nome FROM categoria')  # Seleciona apenas os nomes
+        linha = cur.fetchall()
+        # Extrai apenas os nomes das categorias
+        lista = [i[0] for i in linha]
+    return lista   
+    
 # Deletar categoria
 def deletar_categoria(i):
     with con:
@@ -53,6 +65,17 @@ def criar_subcategoria(i):
     cur = con.cursor()
     query = "INSERT INTO subcategoria(nome) values(?)"
     cur.execute(query, i)
+    con.commit()
+# Ver Categoria
+def ver_subcategoria():
+    lista = []
+    with con:
+        cur = con.cursor()
+        cur.execute('SELECT nome FROM subcategoria')  # Seleciona apenas os nomes
+        linha = cur.fetchall()
+        # Extrai apenas os nomes das categorias
+        lista = [i[0] for i in linha]
+    return lista  
 # Deletar subcategoria
 def deletar_subcategoria(i):
     with con:

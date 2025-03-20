@@ -1,7 +1,7 @@
 from tkinter.ttk import*
 from tkinter import*
 from tkinter import ttk
-from tkinter import Tk
+from tkinter import Tk, Label
 from tkinter import messagebox, Toplevel, END
 from views import*
 from colors import*
@@ -12,6 +12,7 @@ from datetime import date
 from tkinter import Tk, Label, Button, filedialog as fd
 from PIL import Image, ImageTk
 from datetime import datetime
+from views import*
 
 import time
 import progressbar
