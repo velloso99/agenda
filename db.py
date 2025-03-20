@@ -25,13 +25,11 @@ try:
                 nascimento TEXT,
                 idade TEXT,
                 cep TEXT,
-                local TEXT,
                 endereco TEXT,
                 numero text,
                 complemento text,
                 bairro TEXT, 
                 municipio TEXT,
-                estado TEXT,
                 imagem TEXT,
                 
             FOREIGN KEY(categoria) REFERENCES categoria(nome) ON UPDATE CASCADE ON DELETE CASCADE,

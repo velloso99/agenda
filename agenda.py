@@ -358,7 +358,7 @@ def mostrar_contatos():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         # Definição do cabeçalho
-        list_header = ['id', 'Nome', 'DDD', 'Contato', 'categoria',  'subcategoria','E_Mail', 'Nascimento', 'idade', 'CEP','','Endereço','numero', 'Complemento', 'Bairro','Municipio', 'Estado','imagem']
+        list_header = ['id','Nome', 'DDD', 'Contato', 'categoria',  'subcategoria','E_Mail', 'Nascimento', 'idade', 'CEP','Endereço','numero', 'Complemento', 'Bairro','Municipio', 'imagem']
     
         # Obtém os dados do estoque
         df_list = ver_contato()  # Certifique-se de que essa função retorna os dados corretamente
@@ -382,8 +382,8 @@ def mostrar_contatos():
         frame_tabela.grid_rowconfigure(0, weight=12)
 
         # Configuração das colunas
-        hd = ["center", "nw", "nw", "center", "center", "center", "center", "center", "center","center", "center","nw","center","nw","nw","nw","center","nw"]
-        h = [40, 150, 150, 70, 70, 150, 150, 100,100,40, 150, 150, 70, 70, 150, 150, 100,100, ]
+        hd = ["center", "nw", "nw", "center", "center", "center", "center", "center", "center", "center","nw","center","nw","nw","nw","nw"]
+        h = [40, 100, 40, 70, 70, 70, 150, 100,100,150, 150, 70, 70, 150, 150, 100, ]
     
         for n, col in enumerate(list_header):
             tree_agenda.heading(col, text=col.title(), anchor=NW)

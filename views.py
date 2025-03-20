@@ -12,7 +12,7 @@ except sqlite3.Error as e:
 def criar_contato(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO agenda(nome,ddd,contato,categoria,subcategoria,email,nascimento,idade,cep,local,endereco,numero,complemento,bairro,municipio,estado,imagem) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        query = "INSERT INTO agenda(nome,ddd,contato,categoria,subcategoria,email,nascimento,idade,cep,endereco,numero,complemento,bairro,municipio,imagem) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
         cur.execute(query, i)
 # Ver contato
 def ver_contato():
@@ -27,7 +27,7 @@ def ver_contato():
 def atualizar_contato(i):
     with con:
         cur = con.cursor()
-        query = "UPDATE agenda SET nome=?,ddd=?,contato=?,categoria=?,subcategoria=?,email=?,nascimento=?,idade=?,cep=?,local=?,endereco=?,numero=?,complemento=?,bairro=?,municipio=?,estado=?,imagem=? WHERE id=?"
+        query = "UPDATE agenda SET nome=?,ddd=?,contato=?,categoria=?,subcategoria=?,email=?,nascimento=?,idade=?,cep=?,endereco=?,numero=?,complemento=?,bairro=?,municipio=?,imagem=? WHERE id=?"
         cur.execute(query, i) 
 # Deletar contato
 def deletar_contato(i):
