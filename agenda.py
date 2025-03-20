@@ -3,12 +3,12 @@ from imports import*
 
 root = tk.Tk()
 root.title("Agenda")
-root.geometry("980x900")
+root.geometry("980x750")
 root.configure(background=co1)
 root.resizable(width=False, height=False)
 #root.overrideredirect(1)
 largura_root = 980
-altura_root = 950
+altura_root = 750
 #obter tamanho da tela
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
@@ -29,12 +29,12 @@ frame_botoes.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(root, orient=HORIZONTAL).grid(row=3, columnspan=1, ipadx=680)
 
-frame_painel = Frame(root, width=980, height=500, bg=co1)
+frame_painel = Frame(root, width=980, height=380, bg=co1)
 frame_painel.grid(row=4, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(root, orient=HORIZONTAL).grid(row=5, columnspan=1, ipadx=680)
 
-frame_tabela= Frame(root, width=980, height=200, bg=co1)
+frame_tabela= Frame(root, width=980, height=453, bg=co0)
 frame_tabela.grid(row=6, column=0, pady=0, padx=10, sticky=NSEW)
 
 frame_img = Frame(frame_painel, width=120, height=120, bg=co10)
@@ -53,18 +53,18 @@ app_logo.place(x=0, y=0)
 def calendario():
     def pegar_data():
         data_selecionada = cal.selection_get()  # Obtém a data selecionada
-        entry_data.delete(0, END)  # Limpa a entrada
-        entry_data.insert(0, data_selecionada)  # Insere a data selecionada no campo de texto
+        entry_data.delete(0, END)  # Limpa o Entry
+        entry_data.insert(0, data_selecionada.strftime("%d/%m/%Y"))  # Insere a data formatada no Entry
         calendario_janela.destroy()  # Fecha o calendário
+        calcular_idade()  # Chama a função de calcular idade automaticamente
 
     # Criar uma nova janela para o calendário
-    calendario_janela = Toplevel()
+    calendario_janela = Toplevel(root)
     calendario_janela.title("Selecione a Data")
-    calendario_janela.geometry("100x100")
+    calendario_janela.geometry("300x300")
     calendario_janela.resizable(width=False, height=False)
-    #root.overrideredirect(1)
-    largura_calendario_janela = 100
-    altura_calendario_janela = 100
+    largura_root = 300
+    altura_root = 300
     #obter tamanho da tela
     largura_tela = calendario_janela.winfo_screenwidth()
     altura_tela = calendario_janela.winfo_screenheight()
@@ -73,12 +73,45 @@ def calendario():
     pos_y = (altura_tela - altura_root)//2
     # Definir geometria da janela (LxA+X+Y)
     calendario_janela.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
-    cal = Calendar(calendario_janela, date_pattern="dd-mm-yyyy")  # Calendário com padrão de data
+
+    # Criando o calendário dentro da nova janela
+    cal = Calendar(calendario_janela, date_pattern="dd/mm/yyyy")
     cal.pack(pady=20)
+
     # Botão para confirmar a seleção da data
     btn_selecionar = Button(calendario_janela, text="Selecionar", command=pegar_data)
     btn_selecionar.pack(pady=10)
-    
+
+    def calcular_idade():
+        data_nasc_str = entry_data.get()  # Obtém a data digitada/selecionada no Entry
+        if not data_nasc_str:  # Se estiver vazio, não faz nada
+            return
+        try:
+            data_nasc = datetime.strptime(data_nasc_str, "%d/%m/%Y")  # Converte para formato de data
+            data_atual = datetime.today()  # Obtém a data atual
+        
+            # Calcular idade inteira
+            idade_anos = data_atual.year - data_nasc.year
+            if (data_atual.month, data_atual.day) < (data_nasc.month, data_nasc.day):
+                idade_anos -= 1  # Ajuste para aniversários ainda não ocorridos
+        
+            # Calcular diferença em dias desde o último aniversário
+            ultimo_aniversario = datetime(data_atual.year, data_nasc.month, data_nasc.day)
+            if data_atual < ultimo_aniversario:
+                ultimo_aniversario = datetime(data_atual.year - 1, data_nasc.month, data_nasc.day)
+        
+            dias_desde_aniversario = (data_atual - ultimo_aniversario).days
+            dias_no_ano = 365.25  # Considerando anos bissextos
+        
+            # Idade em decimal = anos completos + fração do ano
+            idade_decimal = idade_anos + (dias_desde_aniversario / dias_no_ano)
+
+            e_idade.delete(0, END)  # Limpa o campo antes de inserir o novo valor
+            e_idade.insert(0, str(idade_anos))  # Exibe a idade como número inteiro
+        except ValueError:
+            e_idade.delete(0, END)
+            e_idade.insert(0, "Erro")
+        
 def escolher_imagem():
         global imagem_tk, l_imagem
 
@@ -101,7 +134,12 @@ def escolher_imagem():
         
             l_imagem = Label(frame_img, image=imagem_tk, bg="white")
             l_imagem.place(x=0, y=0)
-            
+  
+  
+
+
+
+          
 def cadastrar_categoria():
     
     global root
@@ -111,7 +149,7 @@ def cadastrar_categoria():
     root1.title("Categoria")
     root1.geometry("200x120")
     root.configure(background=co1)
-    root.resizable(width=False, height=False)
+    root1.resizable(width=False, height=False)
     largura_root = 200
     altura_root = 200
     #obter tamanho da tela
@@ -148,9 +186,6 @@ def cadastrar_categoria():
     app_subc = Button(root1,command=None, image=app_img_subc, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
     app_subc.place(x=60 , y=160)
     
-    
-         
-            
             
 #********************************************************************************************************************************    
 # Botoes Cabeçalho
@@ -244,6 +279,7 @@ l_idade = Label(frame_painel, text="Idade:", font=('Ivy 10 bold'), bg=co1, fg=co
 l_idade.place(x=10, y=190)
 e_idade= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
 e_idade.place(x=70, y=190)
+
 
 l_cep = Label(frame_painel, text="CEP:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_cep.place(x=10, y=220)
