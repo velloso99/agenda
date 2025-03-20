@@ -1,5 +1,6 @@
 from imports import*
 
+
 root = tk.Tk()
 root.title("Agenda")
 root.geometry("980x900")
@@ -35,6 +36,9 @@ ttk.Separator(root, orient=HORIZONTAL).grid(row=5, columnspan=1, ipadx=680)
 
 frame_tabela= Frame(root, width=980, height=200, bg=co1)
 frame_tabela.grid(row=6, column=0, pady=0, padx=10, sticky=NSEW)
+
+frame_img = Frame(frame_painel, width=120, height=120, bg=co10)
+frame_img.place( y=70, x=500)
 
 #********************************************************************************************************************************
 # Trabalhando no frame logo
@@ -74,13 +78,30 @@ def calendario():
     # Botão para confirmar a seleção da data
     btn_selecionar = Button(calendario_janela, text="Selecionar", command=pegar_data)
     btn_selecionar.pack(pady=10)
+    
+def escolher_imagem():
+        global imagem_tk, l_imagem
 
+        # Abrir janela para selecionar imagem
+        imagem_path = fd.askopenfilename(filetypes=[("Imagens", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")])
+    
+        if not imagem_path:  # Se o usuário cancelar, sair da função
+            return
 
+        # Abrir e redimensionar a imagem
+        imagem = Image.open(imagem_path)
+        imagem = imagem.resize((150, 150))  # Ajuste o tamanho conforme necessário
+        imagem_tk = ImageTk.PhotoImage(imagem)
 
-
-
-
-
+        # Atualizar ou criar o Label com a imagem
+        if 'l_imagem' in globals():  
+            l_imagem.config(image=imagem_tk)
+            l_imagem.image = imagem_tk
+        else:
+        
+            l_imagem = Label(frame_img, image=imagem_tk, bg="white")
+            l_imagem.place(x=0, y=0)
+    
 # Botoes Cabeçalho
 app_img_add = Image.open('img/save.png')
 app_img_add = app_img_add.resize((18,18))
@@ -117,6 +138,12 @@ app_img_procurar = app_img_procurar.resize((18,18))
 app_img_procurar = ImageTk.PhotoImage(app_img_procurar)
 app_procurar = Button(frame_botoes,command=None, image=app_img_procurar, text="Procurar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_procurar.grid(row=0, column=6)
+
+app_img_imagem = Image.open('img/imagem.png')
+app_img_imagem = app_img_imagem.resize((18,18))
+app_img_imagem = ImageTk.PhotoImage(app_img_imagem)
+app_imagem = Button(frame_botoes,command=escolher_imagem, image=app_img_imagem, text="Carregar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_imagem.grid(row=0, column=7)
 
 #******************************************************************************************************************************************************************************************
 # Painel
@@ -162,10 +189,101 @@ bt_calendario.place(x=10, y=160)
 entry_data = Entry(frame_painel, width=10, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
 entry_data.place(x=70, y=160)
 
-l_idade = Label(frame_painel, text="idade:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_idade = Label(frame_painel, text="Idade:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_idade.place(x=10, y=190)
 e_idade= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
 e_idade.place(x=70, y=190)
+
+l_cep = Label(frame_painel, text="CEP:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_cep.place(x=10, y=220)
+e_cep= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_cep.place(x=70, y=220)
+
+l_endereco = Label(frame_painel, text="Logradouro:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_endereco.place(x=10, y=250)
+e_endereco= Entry(frame_painel, width=50, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+e_endereco.place(x=175, y=250)
+
+c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
+c_local.set('Rua')
+c_local['values'] = ['Rua', 'Avenida', 'Travessa']
+c_local.place(x=93, y=250)
+
+l_numero = Label(frame_painel, text="Numero:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_numero.place(x=10, y=280)
+e_numero= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_numero.place(x=70, y=280)
+
+l_complemento = Label(frame_painel, text="Complemento:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_complemento.place(x=185, y=280)
+e_complemento= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_complemento.place(x=285, y=280)
+
+l_bairro = Label(frame_painel, text="Bairro:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_bairro.place(x=10, y=310)
+e_bairro= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_bairro.place(x=70, y=310)
+
+l_municipio = Label(frame_painel, text="Municipio:", font=('Ivy 10 bold'), bg=co1, fg=co0)
+l_municipio.place(x=185, y=310)
+e_municipio= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_municipio.place(x=265, y=310)
+
+c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
+c_local.set('Estado')
+c_local['values'] = ['AC','AL', 'AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
+c_local.place(x=380, y=310)
+
+def mostrar_contatos():
+        
+        app_nome = Label(frame_tabela, text="Tabela de Produtos", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
+
+        # Definição do cabeçalho
+        list_header = ['id', 'Nome', 'DDD', 'Contato', 'categoria',  'subcategoria','E_Mail', 'Nascimento', 'idade', 'CEP','','Endereço','numero', 'Complemento', 'Bairro','Municipio', 'Estado','imagem']
+    
+        # Obtém os dados do estoque
+        df_list = ver_contato()  # Certifique-se de que essa função retorna os dados corretamente
+    
+        global tree_agenda
+    
+        # Criando a Treeview
+        tree_agenda = ttk.Treeview(frame_tabela, selectmode="extended", columns=list_header, show="headings")
+
+        # Barras de rolagem
+        vsb = ttk.Scrollbar(frame_tabela, orient="vertical", command=tree_agenda.yview)
+        hsb = ttk.Scrollbar(frame_tabela, orient="horizontal", command=tree_agenda.xview)  # Corrigido aqui
+
+        tree_agenda.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    
+        # Posicionando os widgets
+        tree_agenda.grid(column=0, row=1, sticky='nsew')
+        vsb.grid(column=1, row=1, sticky='ns')
+        hsb.grid(column=0, row=2, sticky='ew')
+    
+        frame_tabela.grid_rowconfigure(0, weight=12)
+
+        # Configuração das colunas
+        hd = ["center", "nw", "nw", "center", "center", "center", "center", "center", "center","center", "center","nw","center","nw","nw","nw","center","nw"]
+        h = [40, 150, 150, 70, 70, 150, 150, 100,100,40, 150, 150, 70, 70, 150, 150, 100,100, ]
+    
+        for n, col in enumerate(list_header):
+            tree_agenda.heading(col, text=col.title(), anchor=NW)
+            tree_agenda.column(col, width=h[n], anchor=hd[n])
+
+        # Inserindo os dados
+        if df_list:
+            for item in df_list:
+                tree_agenda.insert("", "end", values=item)
+mostrar_contatos()    
+
+
+
+
+
+
+
+
 
 
 

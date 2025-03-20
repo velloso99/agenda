@@ -25,6 +25,7 @@ try:
                 nascimento TEXT,
                 idade TEXT,
                 cep TEXT,
+                local TEXT,
                 endereco TEXT,
                 numero text,
                 complemento text,
