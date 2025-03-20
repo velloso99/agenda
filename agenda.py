@@ -136,7 +136,38 @@ def escolher_imagem():
             l_imagem.place(x=0, y=0)
   
   
+def buscar_cep():
+    cep = e_cep.get().strip().replace("-", "")  # Remove espaços e traços do CEP
+    if len(cep) != 8 or not cep.isdigit():
+        e_endereco.delete(0, END)
+        e_bairro.delete(0, END)
+        e_municipio.delete(0, END)
+        e_endereco.insert(0, "CEP inválido")
+        return
 
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        dados = response.json()
+        if "erro" in dados:
+            e_endereco.delete(0, END)
+            e_bairro.delete(0, END)
+            e_municipio.delete(0, END)
+            e_endereco.insert(0, "CEP não encontrado")
+        else:
+            e_endereco.delete(0, END)
+            e_bairro.delete(0, END)
+            e_municipio.delete(0, END)
+
+            e_endereco.insert(0, dados['logradouro'])
+            e_bairro.insert(0, dados['bairro'])
+            e_municipio.insert(0, f"{dados['localidade']} - {dados['uf']}")
+    else:
+        e_endereco.delete(0, END)
+        e_bairro.delete(0, END)
+        e_municipio.delete(0, END)
+        e_endereco.insert(0, "Erro na consulta")
 
 
           
@@ -210,7 +241,7 @@ app_delete.grid(row=0, column=3)
 app_img_adress = Image.open('img/andress.png')
 app_img_adress = app_img_adress.resize((18,18))
 app_img_adress = ImageTk.PhotoImage(app_img_adress)
-app_adress = Button(frame_botoes,command=None, image=app_img_adress, text="CEP", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_adress = Button(frame_botoes,command=buscar_cep, image=app_img_adress, text="CEP", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_adress.grid(row=0, column=4)
 
 app_img_categoria = Image.open('img/cat.png')
@@ -289,12 +320,12 @@ e_cep.place(x=70, y=220)
 l_endereco = Label(frame_painel, text="Logradouro:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_endereco.place(x=10, y=250)
 e_endereco= Entry(frame_painel, width=50, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
-e_endereco.place(x=175, y=250)
+e_endereco.place(x=93, y=250)
 
-c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
-c_local.set('Rua')
-c_local['values'] = ['Rua', 'Avenida', 'Travessa']
-c_local.place(x=93, y=250)
+#c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
+#c_local.set('Rua')
+#c_local['values'] = ['Rua', 'Avenida', 'Travessa']
+#c_local.place(x=93, y=250)
 
 l_numero = Label(frame_painel, text="Numero:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_numero.place(x=10, y=280)
@@ -313,13 +344,13 @@ e_bairro.place(x=70, y=310)
 
 l_municipio = Label(frame_painel, text="Municipio:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_municipio.place(x=185, y=310)
-e_municipio= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_municipio= Entry(frame_painel, width=25, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
 e_municipio.place(x=265, y=310)
 
-c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
-c_local.set('Estado')
-c_local['values'] = ['AC','AL', 'AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
-c_local.place(x=380, y=310)
+#c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
+#c_local.set('Estado')
+#c_local['values'] = ['AC','AL', 'AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
+#c_local.place(x=380, y=310)
 
 def mostrar_contatos():
         
