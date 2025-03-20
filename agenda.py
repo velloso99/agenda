@@ -101,7 +101,58 @@ def escolher_imagem():
         
             l_imagem = Label(frame_img, image=imagem_tk, bg="white")
             l_imagem.place(x=0, y=0)
+            
+def cadastrar_categoria():
     
+    global root
+    
+    #Criando a janela
+    root1 = Toplevel(root) 
+    root1.title("Categoria")
+    root1.geometry("200x120")
+    root.configure(background=co1)
+    root.resizable(width=False, height=False)
+    largura_root = 200
+    altura_root = 200
+    #obter tamanho da tela
+    largura_tela = root1.winfo_screenwidth()
+    altura_tela = root1.winfo_screenheight()
+    # Calcular posição para centralizar
+    pos_x = ( largura_tela-largura_root )//2
+    pos_y = (altura_tela - altura_root)//2
+    # Definir geometria da janela (LxA+X+Y)
+    root1.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")  
+    
+    
+    l_id = Label(root1, text="Categoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
+    l_id.place(x=60, y=10)
+    e_id= Entry(root1, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+    e_id.place(x=35, y=40)     
+    
+    # Botoes Cabeçalho
+    app_img_add = Image.open('img/save.png')
+    app_img_add = app_img_add.resize((18,18))
+    app_img_add = ImageTk.PhotoImage(app_img_add)
+    app_add = Button(root1,command=None, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_add.place(x=60 , y=60)
+    
+    l_id = Label(root1, text="Subcategoria", font=('Ivy 10 bold'), bg=co1, fg=co0)
+    l_id.place(x=60, y=110)
+    e_id= Entry(root1, width=19, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
+    e_id.place(x=35, y=140)     
+    
+    # Botoes Cabeçalho
+    app_img_subc = Image.open('img/save.png')
+    app_img_subc = app_img_subc.resize((18,18))
+    app_img_subc = ImageTk.PhotoImage(app_img_subc)
+    app_subc = Button(root1,command=None, image=app_img_subc, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+    app_subc.place(x=60 , y=160)
+    
+    
+         
+            
+            
+#********************************************************************************************************************************    
 # Botoes Cabeçalho
 app_img_add = Image.open('img/save.png')
 app_img_add = app_img_add.resize((18,18))
@@ -130,7 +181,7 @@ app_adress.grid(row=0, column=4)
 app_img_categoria = Image.open('img/cat.png')
 app_img_categoria = app_img_categoria.resize((18,18))
 app_img_categoria = ImageTk.PhotoImage(app_img_categoria)
-app_categoria = Button(frame_botoes,command=None, image=app_img_categoria, text="Categoria", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_categoria = Button(frame_botoes,command=cadastrar_categoria, image=app_img_categoria, text="Categoria", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_categoria.grid(row=0, column=5)
 
 app_img_procurar = Image.open('img/procurar.png')
