@@ -111,8 +111,8 @@ def calendario():
             e_idade.insert(0, str(idade_anos))  # Exibe a idade como número inteiro
         except ValueError:
             e_idade.delete(0, END)
-            e_idade.insert(0, "Erro")
-        
+            e_idade.insert(0, "Erro") 
+#-----------------------------              
 def escolher_imagem():
         global imagem_tk, l_imagem
 
@@ -135,8 +135,7 @@ def escolher_imagem():
         
             l_imagem = Label(frame_img, image=imagem_tk, bg="white")
             l_imagem.place(x=0, y=0)
-  
-  
+#-------------------------------  
 def buscar_cep():
     cep = e_cep.get().strip().replace("-", "")  # Remove espaços e traços do CEP
     if len(cep) != 8 or not cep.isdigit():
@@ -169,9 +168,7 @@ def buscar_cep():
         e_bairro.delete(0, END)
         e_municipio.delete(0, END)
         e_endereco.insert(0, "Erro na consulta")
-
-
-          
+#-------------------------------         
 def cadastrar_categoria():
     
     global root
@@ -198,6 +195,11 @@ def cadastrar_categoria():
         if nome == "":
             messagebox.showerror("Erro", "Preencha o campo!")
             return
+        # Define the criar_categoria function or import it from the appropriate module
+        def criar_categoria(categorias):
+            # Add logic to handle the category creation
+            print(f"Categoria criada: {categorias}")
+        
         criar_categoria([nome])  # Adiciona ao banco
         messagebox.showinfo("Sucesso", "Categoria cadastrada com sucesso!")
         root1.destroy()
@@ -207,48 +209,20 @@ def cadastrar_categoria():
         if nome == "":
             messagebox.showerror("Erro", "Preencha o campo!")
             return
+        def criar_subcategoria(subcategorias):
+            # Add logic to handle the subcategory creation
+            print(f"Subcategoria criada: {subcategorias}")
+        
         criar_subcategoria([nome])  # Adiciona ao banco
         messagebox.showinfo("Sucesso", "Subcategoria cadastrada com sucesso!")  
         root1.destroy() 
         
-    # Função para buscar categorias no banco
-    def carregar_categorias():
-        con = sqlite3.connect("banco.db")
-        cur = con.cursor()
-        cur.execute("SELECT id, nome FROM categorias")
-        categorias = cur.fetchall()
-        con.close()
     
-        categoria_dict = {str(id): nome for id, nome in categorias}
-        return categoria_dict
-
-    # Função para carregar subcategorias relacionadas
-    def carregar_subcategorias(event=None):
-        categoria_id = c_categoria.get()
     
-        if categoria_id:
-            con = sqlite3.connect("banco.db")
-            cur = con.cursor()
-            cur.execute("SELECT nome FROM subcategorias WHERE categoria_id = ?", (categoria_id,))
-            subcategorias = [row[0] for row in cur.fetchall()]
-            con.close()
-        
-            c_subcategoria["values"] = []  # Limpa os valores antigos
-            c_subcategoria["values"] = subcategorias  # Atualiza com novos valores
-            c_subcategoria.set("")  # Limpa a seleção anterior para atualizar corretamente
-
-    # Função para atualizar os combobox sem fechar o app
-    def atualizar_dados():
-        categorias = carregar_categorias()
-    
-        c_categoria["values"] = list(categorias.keys())  # Atualiza o combobox de categorias
-        c_categoria.set("")  # Limpa a seleção anterior
-        c_subcategoria["values"] = []  # Limpa subcategorias
         
       
     
-    # Buscar categorias do banco
-    categorias = carregar_categorias()
+        
     
      
     
@@ -290,14 +264,16 @@ def cadastrar_categoria():
     app_img_del_sub = ImageTk.PhotoImage(app_img_del_sub)
     app_del_del_sub = Button(frame_painel_cat,command=None, image=app_img_del_sub, text="Delete", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
     app_del_del_sub.place(x=100, y=160)
-    
+#-------------------------------
+def cadastrar_contato():
+    pass  
             
 #********************************************************************************************************************************    
 # Botoes Cabeçalho
 app_img_add = Image.open('img/save.png')
 app_img_add = app_img_add.resize((18,18))
 app_img_add = ImageTk.PhotoImage(app_img_add)
-app_add = Button(frame_botoes,command=None, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
+app_add = Button(frame_botoes,command=cadastrar_contato, image=app_img_add, text="Salvar", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_add.grid(row=0, column=1)
 
 app_img_update = Image.open('img/update.png')
@@ -336,11 +312,7 @@ app_img_imagem = ImageTk.PhotoImage(app_img_imagem)
 app_imagem = Button(frame_botoes,command=escolher_imagem, image=app_img_imagem, text="Carregar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_imagem.grid(row=0, column=7)
 
-app_img_software = Image.open('img/update.png')
-app_img_software = app_img_software.resize((18,18))
-app_img_software = ImageTk.PhotoImage(app_img_software)
-app_img_software = Button(frame_botoes,command=atualizar_dados, image=app_img_software, text="Atualizar Software", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
-app_img_software.grid(row=0, column=7)
+
 
 #******************************************************************************************************************************************************************************************
 # Painel
@@ -368,7 +340,7 @@ c_categoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
 c_categoria.set('Categorias')
 c_categoria['values'] = ver_categoria()
 c_categoria.place(x=10, y=100)
-c_categoria.bind("<<ComboboxSelected>>", carregar_subcategorias)  # Evento para carregar subcategorias
+
 
 c_subcategoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
 c_subcategoria.set('Subcategorias')

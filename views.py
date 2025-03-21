@@ -42,6 +42,7 @@ def criar_categoria(i):
     query = "INSERT INTO categoria(nome) values(?)"
     cur.execute(query, i)
     con.commit() 
+    
 # Ver Categoria
 def ver_categoria():
     lista = []
@@ -51,8 +52,8 @@ def ver_categoria():
         linha = cur.fetchall()
         # Extrai apenas os nomes das categorias
         lista = [i[0] for i in linha]
-    return lista   
-    
+    return lista  
+
 # Deletar categoria
 def deletar_categoria(i):
     with con:
