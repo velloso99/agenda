@@ -1,4 +1,5 @@
 from imports import*
+from views import*
 from PIL import Image, ImageTk
 
 
@@ -37,9 +38,6 @@ ttk.Separator(root, orient=HORIZONTAL).grid(row=5, columnspan=1, ipadx=680)
 
 frame_tabela= Frame(root, width=980, height=453, bg=co0)
 frame_tabela.grid(row=6, column=0, pady=0, padx=10, sticky=NSEW)
-
-frame_img = Frame(frame_painel, width=120, height=120, bg=co10)
-frame_img.place( y=70, x=500)
 
 #********************************************************************************************************************************
 # Trabalhando no frame logo
@@ -112,29 +110,6 @@ def calendario():
         except ValueError:
             e_idade.delete(0, END)
             e_idade.insert(0, "Erro") 
-#-----------------------------              
-def escolher_imagem():
-        global imagem_tk, l_imagem
-
-        # Abrir janela para selecionar imagem
-        imagem_path = fd.askopenfilename(filetypes=[("Imagens", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")])
-    
-        if not imagem_path:  # Se o usuário cancelar, sair da função
-            return
-
-        # Abrir e redimensionar a imagem
-        imagem = Image.open(imagem_path)
-        imagem = imagem.resize((150, 150))  # Ajuste o tamanho conforme necessário
-        imagem_tk = ImageTk.PhotoImage(imagem)
-
-        # Atualizar ou criar o Label com a imagem
-        if 'l_imagem' in globals():  
-            l_imagem.config(image=imagem_tk)
-            l_imagem.image = imagem_tk
-        else:
-        
-            l_imagem = Label(frame_img, image=imagem_tk, bg="white")
-            l_imagem.place(x=0, y=0)
 #-------------------------------  
 def buscar_cep():
     cep = e_cep.get().strip().replace("-", "")  # Remove espaços e traços do CEP
@@ -224,7 +199,6 @@ def cadastrar_categoria():
     
         
     
-     
     
     frame_painel_cat = Frame(root1, width=200, height=200, bg=co1)
     frame_painel_cat.grid(row=4, column=0, pady=0, padx=0, sticky=NSEW)
@@ -264,9 +238,61 @@ def cadastrar_categoria():
     app_img_del_sub = ImageTk.PhotoImage(app_img_del_sub)
     app_del_del_sub = Button(frame_painel_cat,command=None, image=app_img_del_sub, text="Delete", width=80, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
     app_del_del_sub.place(x=100, y=160)
-#-------------------------------
+#************************************************************************************
 def cadastrar_contato():
-    pass  
+    
+    nome = e_nome.get().strip()
+    ddd = e_ddd.get().strip()
+    contato = e_contato.get().strip()
+    categoria = c_categoria.get().strip()
+    subcategoria = c_subcategoria.get().strip()
+    email = e_email.get().strip()
+    nascimento = entry_data.get().strip()
+    idade = e_idade.get().strip()
+    cep = e_cep.get().strip()
+    endereco = e_endereco.get().strip()
+    numero = e_numero.get().strip()
+    complemento = e_complemento.get().strip()
+    bairro = e_bairro.get().strip()
+    municipio = e_municipio.get().strip()
+    
+    # **Verificar apenas campos essenciais**
+    if not nome or not contato or not categoria:
+        messagebox.showerror('Erro', 'Nome, Contato e Categoria são obrigatórios!')
+        return
+
+    # **Salvar valores opcionais como "" caso estejam vazios**
+    lista = [
+        nome, ddd or "", contato, categoria, subcategoria or "", email or "", 
+        nascimento or "", idade or "", cep or "", endereco or "", numero or "", 
+        complemento or "", bairro or "", municipio or ""
+    ]
+    
+    # **Adicionar contato ao banco**
+    criar_contato(lista)
+    messagebox.showinfo('Sucesso', 'Contato cadastrado com sucesso!')
+
+    # **Limpar campos após cadastro**
+    e_nome.delete(0, END)
+    e_ddd.delete(0, END)
+    e_contato.delete(0, END)
+    c_categoria.set("")  # Para Combobox, usa `set("")`
+    c_subcategoria.set("")
+    e_email.delete(0, END)
+    entry_data.delete(0, END)
+    e_idade.delete(0, END)
+    e_cep.delete(0, END)
+    e_endereco.delete(0, END)
+    e_numero.delete(0, END)
+    e_complemento.delete(0, END)
+    e_bairro.delete(0, END)
+    e_municipio.delete(0, END)
+    
+    # **Atualizar a lista de contatos na interface**
+    mostrar_contatos()
+    
+    
+    
             
 #********************************************************************************************************************************    
 # Botoes Cabeçalho
@@ -306,14 +332,6 @@ app_img_procurar = ImageTk.PhotoImage(app_img_procurar)
 app_procurar = Button(frame_botoes,command=None, image=app_img_procurar, text="Procurar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
 app_procurar.grid(row=0, column=6)
 
-app_img_imagem = Image.open('img/imagem.png')
-app_img_imagem = app_img_imagem.resize((18,18))
-app_img_imagem = ImageTk.PhotoImage(app_img_imagem)
-app_imagem = Button(frame_botoes,command=escolher_imagem, image=app_img_imagem, text="Carregar", width=90, compound=LEFT, overrelief=RIDGE ,font=('Ivy 11'), bg=co1, fg=co0)
-app_imagem.grid(row=0, column=7)
-
-
-
 #******************************************************************************************************************************************************************************************
 # Painel
 l_id = Label(frame_painel, text="id:", font=('Ivy 10 bold'), bg=co1, fg=co0)
@@ -341,12 +359,10 @@ c_categoria.set('Categorias')
 c_categoria['values'] = ver_categoria()
 c_categoria.place(x=10, y=100)
 
-
 c_subcategoria = ttk.Combobox(frame_painel, width=18, font=('Ivy 8 bold'))
 c_subcategoria.set('Subcategorias')
 c_subcategoria['values'] = ver_subcategoria()
 c_subcategoria.place(x=150, y=100)
-
 
 l_email = Label(frame_painel, text="E-Mail:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_email.place(x=10, y=130)
@@ -356,7 +372,6 @@ e_email.place(x=70, y=130)
 # Botão para abrir o calendário
 bt_calendario = Button(frame_painel, text="Data", command=calendario)
 bt_calendario.place(x=10, y=160)
-# Campo de entrada para exibir a data selecionada
 entry_data = Entry(frame_painel, width=10, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
 entry_data.place(x=70, y=160)
 
@@ -364,7 +379,6 @@ l_idade = Label(frame_painel, text="Idade:", font=('Ivy 10 bold'), bg=co1, fg=co
 l_idade.place(x=10, y=190)
 e_idade= Entry(frame_painel, width=10, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
 e_idade.place(x=70, y=190)
-
 
 l_cep = Label(frame_painel, text="CEP:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_cep.place(x=10, y=220)
@@ -376,11 +390,6 @@ l_endereco.place(x=10, y=250)
 e_endereco= Entry(frame_painel, width=50, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
 e_endereco.place(x=93, y=250)
 
-#c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
-#c_local.set('Rua')
-#c_local['values'] = ['Rua', 'Avenida', 'Travessa']
-#c_local.place(x=93, y=250)
-
 l_numero = Label(frame_painel, text="Numero:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_numero.place(x=10, y=280)
 e_numero= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
@@ -388,7 +397,7 @@ e_numero.place(x=70, y=280)
 
 l_complemento = Label(frame_painel, text="Complemento:", font=('Ivy 10 bold'), bg=co1, fg=co0)
 l_complemento.place(x=185, y=280)
-e_complemento= Entry(frame_painel, width=15, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
+e_complemento= Entry(frame_painel, width=15, justify=LEFT, font=('Ivy 10 bold'),  relief='solid')
 e_complemento.place(x=285, y=280)
 
 l_bairro = Label(frame_painel, text="Bairro:", font=('Ivy 10 bold'), bg=co1, fg=co0)
@@ -401,10 +410,7 @@ l_municipio.place(x=185, y=310)
 e_municipio= Entry(frame_painel, width=25, justify=CENTER, font=('Ivy 10 bold'),  relief='solid')
 e_municipio.place(x=265, y=310)
 
-#c_local = ttk.Combobox(frame_painel, width=10, font=('Ivy 8 bold'))
-#c_local.set('Estado')
-#c_local['values'] = ['AC','AL', 'AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
-#c_local.place(x=380, y=310)
+
 
 def mostrar_contatos():
         

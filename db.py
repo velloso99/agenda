@@ -30,7 +30,6 @@ try:
                 complemento text,
                 bairro TEXT, 
                 municipio TEXT,
-                imagem TEXT,
                 
             FOREIGN KEY(categoria) REFERENCES categoria(nome) ON UPDATE CASCADE ON DELETE CASCADE,
             FOREIGN KEY(subcategoria) REFERENCES subcategoria(nome) ON UPDATE CASCADE ON DELETE CASCADE     
