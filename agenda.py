@@ -576,13 +576,4 @@ def mostrar_contatos():
 mostrar_contatos()    
 
 
-
-
-
-
-
-
-
-
-
 root.mainloop()
