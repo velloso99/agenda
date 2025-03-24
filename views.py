@@ -29,12 +29,12 @@ def atualizar_contato(i):
         cur = con.cursor()
         query = "UPDATE agenda SET nome=?,ddd=?,contato=?,categoria=?,subcategoria=?,email=?,nascimento=?,idade=?,cep=?,endereco=?,numero=?,complemento=?,bairro=?,municipio=? WHERE id=?"
         cur.execute(query, i) 
-# Deletar contato
-def deletar_contato(i):
+# Função que deleta contato do banco de dados
+def excluir_contato_do_bd(i):
     with con:
         cur = con.cursor()
         query = "DELETE FROM agenda WHERE id=?"
-        cur.execute(query,i)
+        cur.execute(query, (i,))
 #***********************************************************************************************************************************************************************************************************
 # Criar categoria
 def criar_categoria(i):

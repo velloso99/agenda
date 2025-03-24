@@ -292,18 +292,85 @@ def cadastrar_contato():
     mostrar_contatos()
  
 def update_contato():
-    
-        try:
-            tree_itens = tree_agenda.focus()
-            tree_dicionario = tree_agenda.item(tree_itens)
-            tree_lista = tree_dicionario['values']
-        
-            valor_id = tree_lista[0]
-        
+    try:
+        tree_itens = tree_agenda.focus()
+        tree_dicionario = tree_agenda.item(tree_itens)
+        tree_lista = tree_dicionario['values']
+
+        if not tree_lista:
+            messagebox.showerror('Erro', 'Selecione um contato na tabela')
+            return
+
+        valor_id = tree_lista[0]  # ID do contato
+
+        # Limpa os campos antes de preencher com os dados selecionados
+        e_nome.delete(0, END)
+        e_ddd.delete(0, END)
+        e_contato.delete(0, END)
+        c_categoria.set("")  
+        c_subcategoria.set("")
+        e_email.delete(0, END)
+        entry_data.delete(0, END)
+        e_idade.delete(0, END)
+        e_cep.delete(0, END)
+        e_endereco.delete(0, END)
+        e_numero.delete(0, END)
+        e_complemento.delete(0, END)
+        e_bairro.delete(0, END)
+        e_municipio.delete(0, END)
+
+        # Preenche os campos com os dados do contato selecionado
+        e_nome.insert(0, tree_lista[1])
+        e_ddd.insert(0, tree_lista[2])
+        e_contato.insert(0, tree_lista[3])
+        c_categoria.set(tree_lista[4])
+        c_subcategoria.set(tree_lista[5])
+        e_email.insert(0, tree_lista[6])
+        entry_data.insert(0, tree_lista[7])
+        e_idade.insert(0, tree_lista[8])
+        e_cep.insert(0, tree_lista[9])
+        e_endereco.insert(0, tree_lista[10])
+        e_numero.insert(0, tree_lista[11])
+        e_complemento.insert(0, tree_lista[12])
+        e_bairro.insert(0, tree_lista[13])
+        e_municipio.insert(0, tree_lista[14])
+
+        # Função interna para salvar a atualização
+        def update():
+            nome = e_nome.get().strip()
+            ddd = e_ddd.get().strip()
+            contato = e_contato.get().strip()
+            categoria = c_categoria.get().strip()
+            subcategoria = c_subcategoria.get().strip()
+            email = e_email.get().strip()
+            nascimento = entry_data.get().strip()
+            idade = e_idade.get().strip()
+            cep = e_cep.get().strip()
+            endereco = e_endereco.get().strip()
+            numero = e_numero.get().strip()
+            complemento = e_complemento.get().strip()
+            bairro = e_bairro.get().strip()
+            municipio = e_municipio.get().strip()
+
+            # Criar lista com os dados para atualização
+            lista = [nome, ddd, contato, categoria, subcategoria, email, nascimento, idade, cep, endereco, numero, complemento, bairro, municipio, valor_id]
+
+            # Verifica se algum campo está vazio
+            if any(campo == '' for campo in lista[:-1]):  # Exclui o ID da verificação
+                messagebox.showerror('Erro', 'Preencha todos os campos!')
+                return
+
+            # Atualiza no banco de dados
+            atualizar_contato(lista)
+
+            # Mensagem de sucesso
+            messagebox.showinfo('Sucesso', 'Os dados foram atualizados com sucesso!')
+
+            # Limpa os campos após a atualização
             e_nome.delete(0, END)
             e_ddd.delete(0, END)
             e_contato.delete(0, END)
-            c_categoria.set("")  # Para Combobox, usa `set("")`
+            c_categoria.set("")  
             c_subcategoria.set("")
             e_email.delete(0, END)
             entry_data.delete(0, END)
@@ -315,79 +382,26 @@ def update_contato():
             e_bairro.delete(0, END)
             e_municipio.delete(0, END)
 
-            e_nome.insert(0, tree_lista[1])
-            e_ddd.insert(0, tree_lista[2])
-            e_contato.insert(0, tree_lista[3])
-            c_categoria.insert(0, tree_lista[4])
-            c_subcategoria.insert(0, tree_lista[5])
-            e_email.insert(0, tree_lista[6])
-            entry_data.insert(0, tree_lista[7])
-            e_idade.insert(0, tree_lista[8])
-            e_cep.insert(0, tree_lista[9])
-            e_endereco.insert(0, tree_lista[10])
-            e_numero.insert(0, tree_lista[11])
-            e_complemento.insert(0, tree_lista[12])
-            e_bairro.insert(0, tree_lista[13])
-            e_municipio.insert(0, tree_lista[14])
-        
-            def update():
-            
-                nome = e_nome.get().strip()
-                ddd = e_ddd.get().strip()
-                contato = e_contato.get().strip()
-                categoria = c_categoria.get().strip()
-                subcategoria = c_subcategoria.get().strip()
-                email = e_email.get().strip()
-                nascimento = entry_data.get().strip()
-                idade = e_idade.get().strip()
-                cep = e_cep.get().strip()
-                endereco = e_endereco.get().strip()
-                numero = e_numero.get().strip()
-                complemento = e_complemento.get().strip()
-                bairro = e_bairro.get().strip()
-                municipio = e_municipio.get().strip()
-    
-                lista = [nome, ddd, contato, categoria, subcategoria, email, nascimento, idade , cep , endereco , numero , complemento , bairro , municipio]
-                #verificando caso algum campo esteja vazio
-                for i in lista:
-                    if i == '':
-                        messagebox.showerror('Erro', 'Preencha todos os campos!')  
-                    return
-                atualizar_contato(lista)
-                # Mostrando a mensagem de sucesso
-                messagebox.showinfo('Sucesso', 'Os dados Atualizados com sucesso!' )    
+            # Atualiza a exibição da tabela
+            mostrar_contatos()
 
-                # Limpa os campos
-                e_nome.delete(0, END)
-                e_ddd.delete(0, END)
-                e_contato.delete(0, END)
-                c_categoria.set("")  # Para Combobox, usa `set("")`
-                c_subcategoria.set("")
-                e_email.delete(0, END)
-                entry_data.delete(0, END)
-                e_idade.delete(0, END)
-                e_cep.delete(0, END)
-                e_endereco.delete(0, END)
-                e_numero.delete(0, END)
-                e_complemento.delete(0, END)
-                e_bairro.delete(0, END)
-                e_municipio.delete(0, END)
+            # Destroi o botão após a atualização
+            botao_update.destroy()
 
-                # Chama a função que exibe os logins atualizados (se existir)
-                mostrar_contatos()
-                botao_update.destroy()
-                
-                botao_update = Button(frame_botoes, command= update,  anchor=CENTER,text='Salvar e Atualizar'.upper(), width=18, overrelief=RIDGE, font=('Ivy 10'), bg=co3, fg=co1)
-                botao_update.grid(row=0, column=7)
-        except IndexError:
-            messagebox.showerror('Erro', 'Selecione um dos login na tabela')
+        # Cria o botão "Salvar e Atualizar"
+        botao_update = Button(frame_botoes, command=update, text='Salvar e Atualizar'.upper(),
+                              width=18, overrelief=RIDGE, font=('Ivy 10'), bg=co3, fg=co1)
+        botao_update.grid(row=0, column=7)
+
+    except IndexError:
+        messagebox.showerror('Erro', 'Selecione um contato na tabela')
     
 def deletar_contato():
     try:
         # Pegar o item selecionado na treeview
-        tree_itens = tree_agenda.focus()  
-        tree_dicionario = tree_agenda.item(tree_itens)  
-        tree_lista = tree_dicionario['values']  
+        tree_itens = tree_agenda.focus()
+        tree_dicionario = tree_agenda.item(tree_itens)
+        tree_lista = tree_dicionario['values']
 
         # Verifica se algum item foi selecionado
         if not tree_lista:
@@ -401,8 +415,8 @@ def deletar_contato():
         if not resposta:
             return
 
-        # Deletar do banco de dados
-        deletar_contato([valor_id])
+        # Deletar do banco de dados usando a função correta
+        deletar_contato(valor_id)
 
         # Mensagem de sucesso
         messagebox.showinfo('Sucesso', 'Contato deletado com sucesso!')
@@ -412,7 +426,6 @@ def deletar_contato():
 
     except Exception as e:
         messagebox.showerror('Erro', f'Erro ao deletar contato: {str(e)}')
-            
         
 #********************************************************************************************************************************    
 # Botoes Cabeçalho
